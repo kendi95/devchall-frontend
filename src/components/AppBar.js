@@ -1,0 +1,100 @@
+import React, { useState } from 'react';
+import ApplicationBar from '@material-ui/core/AppBar';
+import { Toolbar, IconButton, Typography } from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
+import MenuIcon from '@material-ui/icons/Menu';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import MoreIcon from '@material-ui/icons/MoreVert';
+
+import Menu from './Menu';
+import MenuMobile from './MenuMobile';
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        flexGrow: 1,
+    },
+    appBarColor: {
+        background: "#E64A19",
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    title: {
+        flexGrow: 1,
+    },
+    appBarContainer: {
+        width: '500px'
+    },
+    sectionDesktop: {
+        display: 'none',
+        [theme.breakpoints.up('md')]: {
+            display: 'flex'
+        }
+    },
+    sectionMobile: {
+        display: 'flex',
+        [theme.breakpoints.up('md')]: {
+            display: 'none'
+        }
+    }
+}));
+
+export default function AppBar(){
+
+    const classes = useStyles();
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [mobileAnchorEl, setMobileAnchorEl] = useState(null);
+    const isOpenMenu = Boolean(anchorEl);
+    const isMobileOpenMenu = Boolean(mobileAnchorEl)
+    const menuId = 'primary-search-account-menu'; 
+
+    const onMenuClose = () => {
+        setAnchorEl(null);
+        setMobileAnchorEl(null);
+    }
+
+    const handleOpenProfileMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    }
+
+    return (
+        <div className={classes.root}>
+            <ApplicationBar position="static" className={classes.appBarColor}>
+                <Toolbar>
+                    <IconButton edge="start" classeName={classes.menuButton} color="inherit" arial-label="menu">
+                        <MenuIcon/>
+                    </IconButton>
+                    <Typography variant="h5" className={classes.title}>
+                        Dev Chall
+                    </Typography>
+                    <div className={classes.sectionDesktop}>
+                        <IconButton 
+                            edge="end" 
+                            aria-controls={menuId}
+                            aria-haspopup="true"
+                            color="inherit" 
+                            arial-label="account of current user" 
+                            onClick={handleOpenProfileMenu}>
+                            <AccountCircleIcon />
+                        </IconButton>
+                    </div>
+                    <div className={classes.sectionMobile}>
+                        <IconButton 
+                            edge="end" 
+                            aria-controls={menuId}
+                            aria-haspopup="true"
+                            color="inherit" 
+                            arial-label="account of current user" 
+                            onClick={handleOpenProfileMenu}>
+                            <MoreIcon />
+                        </IconButton>
+                    </div>
+                </Toolbar>
+                
+                <Menu anchorEl={anchorEl} open={isOpenMenu} onClose={onMenuClose}/>
+                <MenuMobile anchorEl={mobileAnchorEl} open={isMobileOpenMenu} onClose={onMenuClose}/>
+
+            </ApplicationBar>
+        </div>
+    );
+}

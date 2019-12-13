@@ -1,58 +1,42 @@
-import React, { useState } from 'react';
+import React from 'react';
+
+import {makeStyles} from '@material-ui/core/styles';
+import { TextField, Button } from '@material-ui/core';
 
 import api from '../../services/api';
-import "../index.css";
 
-export default function Signup({history}){
-
-    const [nome, setNome] = useState('');
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
-
-    async function onSubmit(event){
-        event.preventDefault();
-
-        const response = await api.post('/signup', {nome, email, senha});
-        const {token} = response.data;
-
-        localStorage.setItem('user', token);
-        
-        //redirecionar para a pagina principal
-        history.push("/");
+const useStyles = makeStyles( theme => ({
+    field: {
+        width: '100%',
+        marginTop: '1%'
+    },
+    button: {
+        width: '100%',
+        marginTop: '5%',
+    },
+    buttonRedirect: {
+        width: '100%',
+        marginTop: '2%',
+        color: '#000000'
     }
+}))
 
-    async function onClick(){
-        history.push("/");
+export default props => {
+
+    const classes = useStyles();
+
+    const onSubmit = (event) => {
+        event.preventDefault();
     }
 
     return (
-        <>
-            <form onSubmit={onSubmit}>
-                <label htmlFor="nome">Nome Completo *</label>
-                <input type="text"
-                    id="nome"
-                    placeholder="Informe seu nome completo"
-                    value={nome}
-                    onChange={event => setNome(event.target.value)}/>
-
-                <label htmlFor="email">Email *</label>
-                <input type="email"
-                    id="email"
-                    placeholder="Informe seu email"
-                    value={email}
-                    onChange={event => setEmail(event.target.value)}/>
-
-                <label htmlFor="senha">Senha *</label>
-                <input type="password"
-                    id="senha"
-                    placeholder="Informe sua senha"
-                    value={senha}
-                    onChange={event => setSenha(event.target.value)}/>
-
-                <button className="btn" type="submit">Criar conta</button>
-                <button className="btn-cancel" type="submit" onClick={onClick}>Cancelar</button>
-            </form>
-        </>
+        <form onSubmit={onSubmit}>
+            <TextField type="text" label="Nome completo *" variant="outlined" className={classes.field}/>
+            <TextField type="email" label="Email *" variant="outlined" className={classes.field}/>
+            <TextField type="password" label="Senha *" variant="outlined" className={classes.field}/>
+            <Button variant="outlined" type="submit" color="primary" className={classes.button}>Cadastrar-se</Button>
+            <Button className={classes.buttonRedirect} href="/signin">Clique aqui para fazer login</Button>
+        </form>
     )
 
 }

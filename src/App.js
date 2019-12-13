@@ -1,19 +1,12 @@
 import React from 'react';
+
+import Route from './routes';
 import './App.css';
 
-import Router from './routes';
-import "./pages/index.css";
-
-function App() {
+export default props => {
+  
   return (
-    <div className="container">
+    <Route/>
+  )
 
-      <div className="content">
-        <Router/> 
-      </div>
-      
-    </div>
-  );
 }
-
-export default App;
