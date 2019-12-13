@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ApplicationBar from '@material-ui/core/AppBar';
-import { Toolbar, IconButton, Typography } from '@material-ui/core';
+import { Toolbar, IconButton, Typography, SwipeableDrawer } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -8,6 +8,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 
 import Menu from './Menu';
 import MenuMobile from './MenuMobile';
+import MenuDrawerList from './MenuDrawerList';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -44,9 +45,15 @@ export default function AppBar(){
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState(null);
     const [mobileAnchorEl, setMobileAnchorEl] = useState(null);
+    const [side, setSide] = useState(null);
+    const [open, setOpen] = useState(false);
     const isOpenMenu = Boolean(anchorEl);
     const isMobileOpenMenu = Boolean(mobileAnchorEl)
     const menuId = 'primary-search-account-menu'; 
+
+    const [state, setState] = useState({
+        left: false,
+    });
 
     const onMenuClose = () => {
         setAnchorEl(null);
@@ -57,11 +64,24 @@ export default function AppBar(){
         setAnchorEl(event.currentTarget);
     }
 
+    const toggleDrawer = (side, open) => (event) => {
+        if(event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')){
+            return;
+        }
+        console.log(side, open);
+        setState({ ...state, [side]: open});
+    }
+
     return (
         <div className={classes.root}>
             <ApplicationBar position="static" className={classes.appBarColor}>
                 <Toolbar>
-                    <IconButton edge="start" classeName={classes.menuButton} color="inherit" arial-label="menu">
+                    <IconButton 
+                        edge="start" 
+                        classeName={classes.menuButton} 
+                        color="inherit" 
+                        arial-label="menu"
+                        onClick={toggleDrawer('left', true)}>
                         <MenuIcon/>
                     </IconButton>
                     <Typography variant="h5" className={classes.title}>
@@ -95,6 +115,14 @@ export default function AppBar(){
                 <MenuMobile anchorEl={mobileAnchorEl} open={isMobileOpenMenu} onClose={onMenuClose}/>
 
             </ApplicationBar>
+
+            <SwipeableDrawer 
+                open={state.left}
+                onOpen={toggleDrawer('left', true)}
+                onClose={toggleDrawer('left', false)}>
+                <MenuDrawerList side="left" open="true" />
+            </SwipeableDrawer>
+            
         </div>
     );
 }

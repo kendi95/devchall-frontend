@@ -3,6 +3,8 @@ import { Redirect } from 'react-router-dom';
 
 import AppBar from '../../components/AppBar';
 
+import { Container } from '@material-ui/core';
+
 const token = localStorage.getItem('token');
 
 export default function Home() {
@@ -13,7 +15,12 @@ export default function Home() {
         );
     } else {
         return (
-            <AppBar />
+            <div>
+                <AppBar />
+                <Container fixed>
+                    <h2>Home</h2>
+                </Container>
+            </div>
         );
     }
     
