@@ -9,6 +9,7 @@ import './App.css';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
+import Perfil from './pages/Perfil';
 
 const useStyles = makeStyles( theme => ({
     alignContent: {
@@ -40,6 +41,7 @@ export default function Router() {
         <BrowserRouter> 
             <Switch>
                 <Route path="/" exact component={Home}/>
+                <Route path="/profile" component={Perfil} />
                 <CssBaseline>
                     <Container fixed className={classes.container}>
                         <Typography className={classes.alignContent} variant="div">
@@ -52,6 +54,7 @@ export default function Router() {
                         </Typography>
                     </Container>
                 </CssBaseline>
+                
             </Switch>
         </BrowserRouter>
         

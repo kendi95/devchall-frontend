@@ -40,13 +40,12 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function AppBar(){
+export default props => {
 
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState(null);
     const [mobileAnchorEl, setMobileAnchorEl] = useState(null);
-    const [side, setSide] = useState(null);
-    const [open, setOpen] = useState(false);
+    const [title, setTitle] = useState(null);
     const isOpenMenu = Boolean(anchorEl);
     const isMobileOpenMenu = Boolean(mobileAnchorEl)
     const menuId = 'primary-search-account-menu'; 
@@ -68,8 +67,15 @@ export default function AppBar(){
         if(event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')){
             return;
         }
-        console.log(side, open);
         setState({ ...state, [side]: open});
+    }
+
+    const getTitle = () => {
+        if(props.title === null || props.title === undefined){
+            return "Dev Chall";
+        } else {
+            return props.title;
+        }
     }
 
     return (
@@ -85,7 +91,7 @@ export default function AppBar(){
                         <MenuIcon/>
                     </IconButton>
                     <Typography variant="h5" className={classes.title}>
-                        Dev Chall
+                        {getTitle()}
                     </Typography>
                     <div className={classes.sectionDesktop}>
                         <IconButton 
