@@ -45,7 +45,6 @@ export default props => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState(null);
     const [mobileAnchorEl, setMobileAnchorEl] = useState(null);
-    const [title, setTitle] = useState(null);
     const isOpenMenu = Boolean(anchorEl);
     const isMobileOpenMenu = Boolean(mobileAnchorEl)
     const menuId = 'primary-search-account-menu'; 
@@ -80,7 +79,7 @@ export default props => {
 
     return (
         <div className={classes.root}>
-            <ApplicationBar position="static" className={classes.appBarColor}>
+            <ApplicationBar position="fixed" className={classes.appBarColor}>
                 <Toolbar>
                     <IconButton 
                         edge="start" 

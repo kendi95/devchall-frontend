@@ -15,12 +15,12 @@ export default function Home() {
         );
     } else {
         return (
-            <div>
+            <>
                 <AppBar />
                 <Container fixed>
                     <h2>Home</h2>
                 </Container>
-            </div>
+            </>
         );
     }
     
