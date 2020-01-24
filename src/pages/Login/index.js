@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import {useAlert} from 'react-alert';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Button, Grid, Container, Card, CardContent } from '@material-ui/core';
+import { TextField, Button, Grid, Container, Card, CardContent, Snackbar, InputAdornment } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 import { green } from '@material-ui/core/colors';
+import EmailOutlined from '@material-ui/icons/EmailOutlined';
+import LockOutlined from '@material-ui/icons/LockOutlined';
+
+import DialogProgress from '../../components/DialogProgress';
 
 import api from '../../services/api';
 
 const useStyles = makeStyles( theme => ({
     alignContent: {
-        marginTop: '15%',
-        marginBottom: '15%'
+        marginTop: '13%',
+        marginBottom: '13%'
     },
     card: {
         backgroundColor: '#F57C00',
@@ -52,6 +56,9 @@ const useStyles = makeStyles( theme => ({
     label: {
         marginTop: '2%',
         textAlign: 'center',
+    },
+    margin: {
+        margin: theme.spacing(1)
     }
 }));
 
@@ -62,23 +69,79 @@ export default function Login({history}) {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 
+    const [isOpen, setIsOpen] = useState(false);
+    const [message, setMessage] = useState('');
+    const [severity, setSeverity] = useState('');
+
+    const [isSnackOpen, setIsSnackOpen] = useState(false);
+
     useEffect(() => {
         localStorage.removeItem('token');
-    })
+    });
+
+    const handleClose = () => {
+        setIsOpen(false);
+    }
+
+    const handleSnackClose = () => {
+        setIsSnackOpen(false);
+    }
+
+    const handleOpenDialog = (message) => {
+        setIsOpen(true);
+        setMessage(message);
+    }
+
+    const handleOpenSnackbar = (message, severity) => {
+        setIsSnackOpen(true);
+        setMessage(message);
+        setSeverity(severity);
+    }
 
     const onSubmit = async (event) => {
         event.preventDefault();
 
-        const response = await api.post("/signin", {email, senha});
-        const { token } = response.data;
+        if(email === '' || senha === ''){
+            return handleOpenSnackbar('Um ou mais campos estao vazios', 'warning');
+        }
 
-        localStorage.setItem('token', token);
-        history.push("/");
+        handleOpenDialog('Fazendo login...')
+
+        try{
+            const response = await api.post("/signin", {email, senha});
+            const { token } = response.data;
+
+            if(token != null){
+                setEmail('');
+                setSenha('');
+                handleClose();
+                localStorage.setItem('token', token);
+                history.push("/");
+            }
+        }catch(err){
+            handleClose();
+            if(err.response.status === 401){
+                setEmail('');
+                setSenha('');
+                handleOpenSnackbar(err.response.data.error, 'error');
+            }
+        }
+
+    }
+
+    const Alert = (props) => {
+        return (
+            <MuiAlert elevation={6} variant="filled" {...props }/>
+        )
     }
 
     return (
         <div>
             <Container fixed className={classes.container}>
+                <Snackbar anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} 
+                    open={isSnackOpen} onClose={handleSnackClose} autoHideDuration={3000}>
+                        <Alert onClose={handleSnackClose} severity={severity}>{message}</Alert>
+                    </Snackbar>
                 <div className={classes.alignContent}>
                     <Card className={classes.card}>
                         <div className={classes.label}>
@@ -87,19 +150,34 @@ export default function Login({history}) {
                         <CardContent>
                             <form>
                                 <TextField 
-                                    label="Email *" 
+                                    label="Email *"
                                     type="email" 
-                                    variant="outlined" 
+                                    variant="standard" 
                                     className={classes.field}
                                     value={email}
-                                    onChange={e => setEmail(e.target.value)} />
+                                    onChange={e => setEmail(e.target.value)}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <EmailOutlined />
+                                            </InputAdornment>
+                                        ),
+                                    }}/>
+                                
                                 <TextField 
                                     label="Senha *" 
                                     type="password" 
-                                    variant="outlined" 
+                                    variant="standard" 
                                     className={classes.field} 
                                     value={senha}
-                                    onChange={e => setSenha(e.target.value)} />    
+                                    onChange={e => setSenha(e.target.value)} 
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <LockOutlined />
+                                            </InputAdornment>
+                                        ),
+                                    }}/>    
                                     
                                 <Grid container>
                                     <Grid item xs={6}>
@@ -109,6 +187,7 @@ export default function Login({history}) {
                                         <Button variant="contained" onClick={onSubmit} type="submit" color="primary" className={classes.button}>Entrar</Button>
                                     </Grid>
                                 </Grid>
+                                <DialogProgress open={isOpen} onClose={handleClose} text={message}/>
                             </form>
                         </CardContent>
                     </Card>

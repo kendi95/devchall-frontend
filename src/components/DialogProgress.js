@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 export default function DialogProgress(props) {
 
     const classes = useStyles();
-    const { onClose, open, text } = props;
+    const { open, text } = props;
 
     return (
         <Dialog open={open} maxWidth="xs" fullWidth={true}>

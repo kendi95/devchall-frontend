@@ -21,6 +21,12 @@ export default props => {
                 </IconButton>
                 <p>Perfil</p>
             </MenuItem>
+            <MenuItem>
+                <IconButton aria-label="account of current user" color="inherit">
+                    <AccountCircleIcon />
+                </IconButton>
+                <p>Logout</p>
+            </MenuItem>
         </Menu>
     )
 }

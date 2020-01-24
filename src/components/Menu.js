@@ -7,6 +7,10 @@ export default props => {
 
     const menuId = 'primary-search-account-menu';
 
+    const onLogout = () => {
+        localStorage.removeItem('token');
+    }
+
     return (
         <Menu
             anchorEl={props.anchorEl}
@@ -17,7 +21,7 @@ export default props => {
             open={props.open}
             onClose={props.onClose}>
             <MenuItem dense component={Link} to="/profile">Perfil</MenuItem>
-            <MenuItem dense component={Link} to="/signin">Logout</MenuItem>
+            <MenuItem dense component={Link} to="/signin" onClick={onLogout}>Logout</MenuItem>
         </Menu>
     )
 }
