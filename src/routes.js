@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
 import Perfil from './pages/Perfil';
+import Recovery from './pages/Recovery';
 
 export default function Router() {
 
@@ -17,6 +18,7 @@ export default function Router() {
                 <Route path="/profile" component={Perfil} />
                 <Route path="/signup" component={Signup}/>
                 <Route path="/signin" component={Login}/>
+                <Route path="/recovery" component={Recovery}/>
             </Switch>
         </BrowserRouter>
         

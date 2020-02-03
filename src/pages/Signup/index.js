@@ -1,68 +1,19 @@
 import React, { useState } from 'react';
 
-import {makeStyles} from '@material-ui/core/styles';
 import { TextField, Button, Grid, Container, Card, CardContent, Snackbar, InputAdornment } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
-import { green } from '@material-ui/core/colors';
 import LockOutlined from '@material-ui/icons/LockOutlined';
 import AccountCircleOutlined from '@material-ui/icons/AccountCircleOutlined';
 import EmailOutlined from '@material-ui/icons/EmailOutlined';
 
 import DialogProgress from '../../components/DialogProgress';
+import styles from './styles';
 
 import api from '../../services/api';
 
-const useStyles = makeStyles( theme => ({
-    alignContent: {
-        marginTop: '10%',
-        marginBottom: '10%'
-    },
-    card: {
-        backgroundColor: '#F57C00',
-        borderRadius: '6px',
-        height: '75%',
-        width: '100%', 
-        alignItems: 'center',
-        padding: '2%'
-    },
-    container: {
-        alignItems: 'center',
-        alignContent: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    field: {
-        width: '100%',
-        marginTop: '2%',
-    },
-    button: {
-        padding: theme.spacing(1),
-        width: '100%',
-        marginTop: '5%',
-        color: 'white',
-        backgroundColor: green['700'],
-        '&:hover': {
-            backgroundColor: green['900']
-        }
-    },
-    buttonRedirect: {
-        padding: theme.spacing(1),
-        width: '100%',
-        marginTop: '5%',
-        color: '#000000'
-    },
-    alert: {
-        width: '100%'
-    },
-    label: {
-        marginTop: '2%',
-        textAlign: 'center',
-    }
-}))
-
 export default function Signup({ history }) {
 
-    const classes = useStyles();
+    const classes = styles();
     const [email, setEmail] = useState('');
     const [nome, setNome] = useState('');
     const [senha, setSenha] = useState('');
@@ -96,7 +47,7 @@ export default function Signup({ history }) {
         event.preventDefault();
 
         if(nome === '' || email === '' || senha === ''){
-            return handleOpenSnackbar('Um ou mais campos estao vazios', 'warning');
+            return handleOpenSnackbar('Um ou mais campos estão vazios', 'warning');
         }
 
         handleOpenDialog("Carregando...");
@@ -186,7 +137,7 @@ export default function Signup({ history }) {
                                     }}/> 
                             <Grid container>
                                 <Grid item xs={6}>
-                                    <Button className={classes.buttonRedirect} href="/signin">Clique aqui para fazer login</Button>
+                                    <Button className={classes.buttonRedirect} href="/signin">Fazer login</Button>
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Button variant="contained" type="submit" color="primary" className={classes.button} onClick={onSubmit}>Cadastrar-se</Button>

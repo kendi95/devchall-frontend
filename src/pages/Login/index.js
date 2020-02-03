@@ -1,70 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Button, Grid, Container, Card, CardContent, Snackbar, InputAdornment } from '@material-ui/core';
-import MuiAlert from '@material-ui/lab/Alert';
-import { green } from '@material-ui/core/colors';
+import { TextField, Button, Grid, Container, Card, CardContent, InputAdornment, Typography } from '@material-ui/core';
 import EmailOutlined from '@material-ui/icons/EmailOutlined';
 import LockOutlined from '@material-ui/icons/LockOutlined';
 
 import DialogProgress from '../../components/DialogProgress';
+import SnackBar from '../../components/SnackBar';
+import styles from './styles';
 
 import api from '../../services/api';
 
-const useStyles = makeStyles( theme => ({
-    alignContent: {
-        marginTop: '13%',
-        marginBottom: '13%'
-    },
-    card: {
-        backgroundColor: '#F57C00',
-        borderRadius: '6px',
-        height: '75%',
-        width: '100%', 
-        alignItems: 'center',
-        padding: '2%'
-    },
-    container: {
-        alignItems: 'center',
-        alignContent: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    title: {
-        color: '#ffffff',
-    },
-    field: {
-        marginTop: '5%',
-        width: '100%'
-    },
-    buttonRedirect: {
-        padding: theme.spacing(1),
-        width: '100%',
-        marginTop: '5%',
-        
-    },
-    button: {
-        padding: theme.spacing(1),
-        width: '100%',
-        marginTop: '5%',
-        color: 'white',
-        backgroundColor: green['700'],
-        '&:hover': {
-            backgroundColor: green['900']
-        }
-    },
-    label: {
-        marginTop: '2%',
-        textAlign: 'center',
-    },
-    margin: {
-        margin: theme.spacing(1)
-    }
-}));
-
 export default function Login({history}) {
 
-    const classes = useStyles();
+    const classes = styles();
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
@@ -102,7 +51,7 @@ export default function Login({history}) {
         event.preventDefault();
 
         if(email === '' || senha === ''){
-            return handleOpenSnackbar('Um ou mais campos estao vazios', 'warning');
+            return handleOpenSnackbar('Um ou mais campos estão vazios', 'warning');
         }
 
         handleOpenDialog('Fazendo login...')
@@ -129,19 +78,12 @@ export default function Login({history}) {
 
     }
 
-    const Alert = (props) => {
-        return (
-            <MuiAlert elevation={6} variant="filled" {...props }/>
-        )
-    }
+    
 
     return (
         <div>
             <Container fixed className={classes.container}>
-                <Snackbar anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} 
-                    open={isSnackOpen} onClose={handleSnackClose} autoHideDuration={3000}>
-                        <Alert onClose={handleSnackClose} severity={severity}>{message}</Alert>
-                    </Snackbar>
+                <SnackBar isSnackOpen={isSnackOpen} handleSnackClose={handleSnackClose} severity={severity} message={message}/>
                 <div className={classes.alignContent}>
                     <Card className={classes.card}>
                         <div className={classes.label}>
@@ -177,7 +119,15 @@ export default function Login({history}) {
                                                 <LockOutlined />
                                             </InputAdornment>
                                         ),
-                                    }}/>    
+                                    }}/> 
+
+                                    <div className={classes.recovery}>
+                                        <Link to="/recovery" className={classes.link}>
+                                            <Typography component="h4" className={classes.linkTypo}>Esqueceu a senha?</Typography>
+                                        </Link>
+                                    </div>
+                                    
+                                
                                     
                                 <Grid container>
                                     <Grid item xs={6}>
