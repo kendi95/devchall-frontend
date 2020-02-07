@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import ApplicationBar from '@material-ui/core/AppBar';
 import { Toolbar, IconButton, Typography, SwipeableDrawer } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
@@ -9,6 +10,8 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import Menu from './Menu';
 import MenuMobile from './MenuMobile';
 import MenuDrawerList from './MenuDrawerList';
+
+import api from '../services/api';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -37,11 +40,17 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up('md')]: {
             display: 'none'
         }
+    },
+    avatar: {
+        width: 24,
+        height: 24,
+        borderRadius: 125
     }
 }));
 
-export default props => {
+export default function AppBar({history}, props) {
 
+    const { title } = props;
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState(null);
     const [mobileAnchorEl, setMobileAnchorEl] = useState(null);
@@ -49,9 +58,30 @@ export default props => {
     const isMobileOpenMenu = Boolean(mobileAnchorEl)
     const menuId = 'primary-search-account-menu'; 
 
+    const [imageURL, setImageURL] = useState('');
+
     const [state, setState] = useState({
         left: false,
     });
+
+    useEffect(() => {
+        async function getImageProfile() {
+            const token = localStorage.getItem('token');
+
+            try{
+                const response = await api.get("/profile", {
+                    params: {
+                        token
+                    }
+                });
+                setImageURL(response.data.imageURL);
+            }catch(err){
+                return;
+            }
+        }
+
+        getImageProfile();
+    })
 
     const onMenuClose = () => {
         setAnchorEl(null);
@@ -70,10 +100,10 @@ export default props => {
     }
 
     const getTitle = () => {
-        if(props.title === null || props.title === undefined){
+        if(title === null || title === undefined){
             return "Dev Chall";
         } else {
-            return props.title;
+            return title;
         }
     }
 
@@ -100,7 +130,10 @@ export default props => {
                             color="inherit" 
                             arial-label="account of current user" 
                             onClick={handleOpenProfileMenu}>
-                            <AccountCircleIcon />
+                            {imageURL === '' || imageURL === null 
+                            ? <AccountCircleIcon />
+                            : <img src={imageURL} className={classes.avatar} alt="Ícone" /> }
+                            
                         </IconButton>
                     </div>
                     <div className={classes.sectionMobile}>
